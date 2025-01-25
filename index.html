@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Player</title>
     <style>
-        /* تنظیمات عمومی */
+        /* تنظیمات کلی برای موبایل */
         body {
             margin: 0;
             padding: 0;
@@ -33,18 +33,18 @@
             z-index: -1;
         }
 
-        /* کانتینر اصلی پلیر */
+        /* کانتینر پلیر */
         .player-container {
             width: 90%;
             max-width: 400px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             border-radius: 20px;
             padding: 20px;
             text-align: center;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
 
-        /* کاور موزیک */
+        /* تصویر کاور موزیک */
         .cover {
             width: 100%;
             border-radius: 15px;
@@ -52,39 +52,38 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* نام موزیک */
+        /* عنوان موزیک */
         .song-title {
             font-size: 1.4em;
             font-weight: bold;
             color: #fff;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
-        /* پلیر صوتی */
-        audio {
+        /* نوار پیشرفت */
+        .progress-container {
             width: 100%;
-            outline: none;
-            --progress-color: #ff9800;
-            --background-color: #ffffff;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin: 15px 0;
+            position: relative;
         }
 
-        /* نوار پیشرفت شخصی‌سازی‌شده */
-        audio::-webkit-media-controls-panel {
-            background-color: transparent;
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #ff9800;
+            transition: width 0.3s ease;
         }
 
-        audio::-webkit-media-controls-play-button,
-        audio::-webkit-media-controls-current-time-display,
-        audio::-webkit-media-controls-time-remaining-display {
-            color: white;
-        }
-
-        /* دکمه‌های پخش */
+        /* دکمه‌های کنترل */
         .controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 15px;
+            margin-top: 10px;
         }
 
         .play-button {
@@ -105,37 +104,60 @@
             width: 30px;
             height: 30px;
         }
+
+        /* زمان پخش */
+        .time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #fff;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
 <body>
     <div class="player-container">
-        <!-- تصویر کاور موزیک -->
+        <!-- تصویر کاور -->
         <img src="./cover.jpg" alt="Song Cover" class="cover">
-        
-        <!-- نام آهنگ -->
-        <div class="song-title">beanie(piano version)</div>
-        
-        <!-- پلیر صوتی -->
-        <audio id="audio" src="./beanie.mp3"></audio>
 
-        <!-- دکمه‌های کنترل -->
+        <!-- عنوان موزیک -->
+        <div class="song-title">Hamin Moonde Bood</div>
+
+        <!-- نوار پیشرفت -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <!-- زمان پخش -->
+        <div class="time">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+
+        <!-- دکمه پخش -->
         <div class="controls">
             <button class="play-button" id="play-button">
-                <!-- آیکون پخش -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z"></path>
                 </svg>
             </button>
         </div>
+
+        <!-- پلیر صوتی -->
+        <audio id="audio" src="./beanie.mp3"></audio>
     </div>
 
     <script>
         const audio = document.getElementById('audio');
         const playButton = document.getElementById('play-button');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeElement = document.getElementById('current-time');
+        const durationElement = document.getElementById('duration');
 
         let isPlaying = false;
 
+        // دکمه پخش و توقف
         playButton.addEventListener('click', () => {
             if (isPlaying) {
                 audio.pause();
@@ -155,6 +177,25 @@
                 `;
             }
         });
+
+        // آپدیت نوار پیشرفت و زمان
+        audio.addEventListener('timeupdate', () => {
+            const currentTime = audio.currentTime;
+            const duration = audio.duration;
+            const progressPercent = (currentTime / duration) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+
+            // نمایش زمان جاری و کل
+            currentTimeElement.textContent = formatTime(currentTime);
+            durationElement.textContent = formatTime(duration);
+        });
+
+        // فرمت زمان
+        function formatTime(time) {
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
     </script>
 </body>
 

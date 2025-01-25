@@ -46,43 +46,10 @@
             outline: none;
         }
 
-        audio::-webkit-media-controls-panel {
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-        }
-
-        audio::-webkit-media-controls-play-button,
-        audio::-webkit-media-controls-pause-button {
-            background-color: #ff5722;
-            border-radius: 50%;
-            padding: 5px;
-        }
-
-        audio::-webkit-media-controls-timeline {
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 5px;
-        }
-
         footer {
             margin-top: 20px;
             font-size: 0.8em;
             text-align: center;
-        }
-
-        /* استایل واکنش‌گرا برای موبایل */
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .player-container {
-                padding: 10px;
-                border-radius: 15px;
-            }
-
-            footer {
-                font-size: 0.7em;
-            }
         }
     </style>
 </head>
@@ -90,7 +57,7 @@
 <body>
     <h1>Enjoy the Music 🎵</h1>
     <div class="player-container">
-        <audio controls>
+        <audio controls autoplay>
             <source src="./beanie.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
@@ -101,3 +68,4 @@
 </body>
 
 </html>
+
